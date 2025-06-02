@@ -20,19 +20,19 @@ export const register: RequestHandler = async (req, res) => {
     res.status(201).json({ id: user._id, email: user.email, name: user.name });
 };
 
-export const login: RequestHandler = async (req, res) => {
-    const { email, password } = req.body;
+// export const login: RequestHandler = async (req, res) => {
+//     const { email, password } = req.body;
 
-    const user = await User.findOne({ email });
-    if (!user || !user.password || !(await bcrypt.compare(password, user.password))) {
-        res.status(401).json({ message: "Invalid credentials" });
-        return;
-    };
+//     const user = await User.findOne({ email });
+//     if (!user || !user.password || !(await bcrypt.compare(password, user.password))) {
+//         res.status(401).json({ message: "Invalid credentials" });
+//         return;
+//     };
 
-    const token = generateToken(user.id);
-    res.cookie("token", token, { httpOnly: true, sameSite: "strict", secure: false });
-    res.status(200).json({ id: user._id, email: user.email, name: user.name });
-};
+//     const token = generateToken(user.id);
+//     res.cookie("token", token, { httpOnly: true, sameSite: "strict", secure: false });
+//     res.status(200).json({ id: user._id, email: user.email, name: user.name });
+// };
 
 export const logout: RequestHandler = (req, res) => {
     res.clearCookie("token");
@@ -40,7 +40,6 @@ export const logout: RequestHandler = (req, res) => {
 };
 
 export const getUser: RequestHandler = async (req: any, res) => {
-    console.log(req)
     const user = await User.findById(req.user.id);
     if (!user) {
         res.status(404).json({ message: "User not found" });
