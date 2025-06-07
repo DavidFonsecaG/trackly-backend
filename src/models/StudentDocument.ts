@@ -10,7 +10,11 @@ const documentSchema = new mongoose.Schema({
 });
 
 const studentDocumentSchema = new mongoose.Schema({
-    studentId: String,
+    student: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Student",
+        required: true
+    },
     documents: [documentSchema]
 });
 

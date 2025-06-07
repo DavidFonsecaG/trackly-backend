@@ -1,4 +1,4 @@
-import User from "./user";
+import User from "./User";
 import Student from "./Student";
 import StudentDocument from "./StudentDocument";
 
