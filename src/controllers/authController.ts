@@ -20,20 +20,6 @@ export const register: RequestHandler = async (req, res) => {
     res.status(201).json({ id: user._id, email: user.email, name: user.name });
 };
 
-// export const login: RequestHandler = async (req, res) => {
-//     const { email, password } = req.body;
-
-//     const user = await User.findOne({ email });
-//     if (!user || !user.password || !(await bcrypt.compare(password, user.password))) {
-//         res.status(401).json({ message: "Invalid credentials" });
-//         return;
-//     };
-
-//     const token = generateToken(user.id);
-//     res.cookie("token", token, { httpOnly: true, sameSite: "strict", secure: false });
-//     res.status(200).json({ id: user._id, email: user.email, name: user.name });
-// };
-
 export const logout: RequestHandler = (req, res) => {
     res.clearCookie("token");
     res.json({ message: "Logged out" });
