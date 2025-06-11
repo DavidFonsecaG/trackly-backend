@@ -31,3 +31,30 @@ export const getStudentDocumentsByUser = async (req: any, res: any) => {
         res.status(500).json({ message: "Failed to fetch students"});
     }
 };
+
+export const updateStudentDocument: RequestHandler = async (req: any, res: any) => {
+  try {
+    const { studentId, studentDocument } = req.body;
+
+    if (!studentId || !studentDocument?.documents) {
+      return res.status(400).json({
+        ok: false,
+        message: "Missing studentId or documents",
+      });
+    }
+
+    const updatedDoc = await StudentDocument.findOneAndUpdate(
+      { studentId },
+      { documents: studentDocument.documents },
+      { new: true, upsert: true, runValidators: true }
+    );
+
+    return res.status(200).json(updatedDoc);
+  } catch (err) {
+    console.error("Error updating student document:", err);
+    return res.status(500).json({
+      ok: false,
+      message: "Error when updating student document",
+    });
+  }
+};
