@@ -1,4 +1,4 @@
-import { Request, RequestHandler, Response } from "express";
+import { RequestHandler } from "express";
 import StudentDocument from "../models/StudentDocument";
 import mongoose from "mongoose";
 
@@ -9,7 +9,7 @@ export const createStudentDocument: RequestHandler = async (req: any, res: any) 
             studentId: studentId,
             documents: studentDocument.documents
         });
-        res.status(201).json({createdStudentDocument})
+        res.status(201).json(createdStudentDocument)
     } catch (err) {
         res.status(500).json({
             ok: false,
@@ -57,4 +57,18 @@ export const updateStudentDocument: RequestHandler = async (req: any, res: any) 
       message: "Error when updating student document",
     });
   }
+};
+
+export const deleteStudentDocument: RequestHandler = async (req: any, res: any) => {
+    try {
+        const { studentId } = req.params;
+        const objectId = mongoose.Types.ObjectId.createFromHexString(studentId);
+        const deletedStudent = await StudentDocument.findOneAndDelete({studentId: objectId});
+        if (!deletedStudent) {
+            return res.status(404).json({message: "Student Document not found!"});
+        }
+        res.status(200).json(deletedStudent);
+    } catch (err) {
+        res.status(500).json({message: "Error when deleting a student"});
+    }
 };
