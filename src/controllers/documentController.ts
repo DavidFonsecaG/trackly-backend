@@ -51,7 +51,6 @@ export const updateStudentDocument: RequestHandler = async (req: any, res: any) 
 
     return res.status(200).json(updatedDoc);
   } catch (err) {
-    console.error("Error updating student document:", err);
     return res.status(500).json({
       ok: false,
       message: "Error when updating student document",

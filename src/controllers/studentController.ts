@@ -65,8 +65,31 @@ export const getStudentById = async () => {
 
 };
 
-export const updateStudent = async () => {
+export const updateStudent: RequestHandler = async (req: any, res: any) => {
+    try {
+        const { student } = req.body;
 
+        if (!student?.id) {
+        return res.status(400).json({ message: "Student ID is required" });
+        }
+
+        const updatedStudent = await Student.findByIdAndUpdate(
+        student.id,
+        { $set: student },
+        { new: true, runValidators: true }
+        );
+
+        if (!updatedStudent) {
+        return res.status(404).json({ message: "Student not found" });
+        }
+
+        return res.status(200).json(updatedStudent);
+    } catch (err) {
+        res.status(500).json({
+            ok: false,
+            message: "Error when updating a student"
+        });
+    }
 };
 
 export const deleteStudent: RequestHandler = async (req: any, res: any) => {
