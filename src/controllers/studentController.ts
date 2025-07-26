@@ -70,20 +70,30 @@ export const updateStudent: RequestHandler = async (req: any, res: any) => {
         const { student } = req.body;
 
         if (!student?.id) {
-        return res.status(400).json({ message: "Student ID is required" });
+            return res.status(400).json({ message: "Student ID is required" });
         }
 
         const updatedStudent = await Student.findByIdAndUpdate(
-        student.id,
-        { $set: student },
-        { new: true, runValidators: true }
+            student.id,
+            { $set: student },
+            { new: true, runValidators: true }
         );
 
         if (!updatedStudent) {
-        return res.status(404).json({ message: "Student not found" });
+            return res.status(404).json({ message: "Student not found" });
         }
 
-        return res.status(200).json(updatedStudent);
+        return res.status(200).json({
+            id: updatedStudent._id, 
+            name: updatedStudent.name, 
+            email: updatedStudent.email, 
+            applicationType: updatedStudent.applicationType, 
+            term: updatedStudent.term, 
+            program: updatedStudent.program,
+            schedule: updatedStudent.schedule,
+            status: updatedStudent.status,
+            lastUpdated: updatedStudent.updatedAt
+        });
     } catch (err) {
         res.status(500).json({
             ok: false,
