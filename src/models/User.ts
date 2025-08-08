@@ -21,7 +21,8 @@ const userSchema = new mongoose.Schema({
         minlength: 6,
         maxlength: 100
     },
-    googleId: String
+    googleId: String,
+    picture: String,
 }, { timestamps: true });
 
 export default mongoose.model("User", userSchema);

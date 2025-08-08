@@ -26,6 +26,7 @@ passport.use(new GoogleStrategy({
 }, async (_accessToken, _refreshToken, profile, done) => {
     try {
         const email = profile.emails?.[0].value;
+        console.log(profile);
         let user = await User.findOne({ googleId: profile.id });
 
         if (!user) {
@@ -33,6 +34,7 @@ passport.use(new GoogleStrategy({
                 email,
                 name: profile.displayName,
                 googleId: profile.id,
+                picture: profile.photos?.[0].value,
             });
         }
         return done(null, user);
