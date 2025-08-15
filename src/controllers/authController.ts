@@ -34,3 +34,29 @@ export const getUser: RequestHandler = async (req: any, res) => {
 
     res.json({ id: user._id, email: user.email, name: user.name });
 };
+
+export const update: RequestHandler = async (req: any, res: any) => {
+    const user = await User.findById(req.user.id);
+    const { password, newPassword } = req.body;
+    
+    if (!user || !user.password) {
+        res.status(401).json({ message: "Invalid credentials" });
+        return;
+    };
+
+    const match = await bcrypt.compare(password, user.password);
+
+    if (!match) {
+        res.status(401).json({ message: "Invalid credentials" });
+        return;
+    };
+
+    const hashed = await bcrypt.hash(newPassword, 10);
+    await User.findByIdAndUpdate(
+        user._id,
+        { password: hashed },
+        { new: true, upsert: true, runValidators: true }
+    );
+
+    res.status(200).json({ message: "Password updated"})
+};

@@ -11,7 +11,8 @@ passport.use(new LocalStrategy({
         const user = await User.findOne({ email });
         if (!user || !user.password) return done(null, false, { message: "Invalid credentials" });
 
-        if (!bcrypt.compare(password, user.password)) return done(null, false, { message: " Invalid credentials" });
+        const match = await bcrypt.compare(password, user.password);
+        if (match) return done(null, false, { message: " Invalid credentials" });
 
         return done(null, user);
     } catch (err) {
@@ -26,7 +27,6 @@ passport.use(new GoogleStrategy({
 }, async (_accessToken, _refreshToken, profile, done) => {
     try {
         const email = profile.emails?.[0].value;
-        console.log(profile);
         let user = await User.findOne({ googleId: profile.id });
 
         if (!user) {

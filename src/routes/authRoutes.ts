@@ -1,6 +1,6 @@
 import express from "express";
 import passport from "passport";
-import { register, logout, getUser } from "../controllers/authController";
+import { register, logout, getUser, update } from "../controllers/authController";
 import { protect } from "../middleware/authMiddleware";
 import { generateToken } from "../utils/jwt";
 
@@ -9,6 +9,7 @@ const router = express.Router();
 router.post("/register", register);
 router.post("/logout", logout);
 router.get("/me", protect, getUser);
+router.post("/update", protect, update);
 router.post("/login",
     passport.authenticate("local", { session: false }),
     (req: any, res) => {
