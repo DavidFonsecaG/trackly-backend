@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { Request, Response, NextFunction } from "express";
+import { Response, NextFunction } from "express";
 
 export const protect = (req: any, res: Response, next: NextFunction): void => {
     const token = req.cookies.token;
@@ -7,7 +7,7 @@ export const protect = (req: any, res: Response, next: NextFunction): void => {
     if (!token) {
         res.status(401).json({ message: "Unauthorized" }); 
         return;
-    }
+    };
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET!);
@@ -16,5 +16,5 @@ export const protect = (req: any, res: Response, next: NextFunction): void => {
     } catch {
         res.status(401).json({ message: "Token invalid" });
         return;
-    }
+    };
 };
