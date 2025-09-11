@@ -26,7 +26,12 @@ export const getStudentDocumentsByUser = async (req: any, res: any) => {
             await Promise.all(ids.map(id => StudentDocument.findOne({ studentId: id })))
         ).filter(Boolean);
 
-        res.status(200).json(studentDocuments);
+        const parsedStudentDocuments = studentDocuments.map(sDocuments => ({
+            studentId: sDocuments?.studentId,
+            documents: sDocuments?.documents,
+        }));
+
+        res.status(200).json(parsedStudentDocuments);
     } catch (err) {
         res.status(500).json({ message: "Failed to fetch students"});
     }
