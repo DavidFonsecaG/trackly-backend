@@ -13,11 +13,12 @@ export const register: RequestHandler = async (req, res) => {
     };
 
     const hashed = await bcrypt.hash(password, 10);
-    const user = await User.create({ email, password: hashed, name });
+    const picture = "https://api.dicebear.com/9.x/initials/svg?seed=" + {name};
+    const user = await User.create({ email, password: hashed, name, picture });
 
     const token = generateToken(user.id);
     res.cookie("token", token, { httpOnly: true, sameSite: "strict", secure: false });
-    res.status(201).json({ id: user._id, email: user.email, name: user.name });
+    res.status(201).json({ id: user._id, email: user.email, name: user.name, picture: user.picture });
 };
 
 export const logout: RequestHandler = (req, res) => {
@@ -32,7 +33,7 @@ export const getUser: RequestHandler = async (req: any, res) => {
         return;
     };
 
-    res.json({ id: user._id, email: user.email, name: user.name });
+    res.json({ id: user._id, email: user.email, name: user.name, picture: user.picture });
 };
 
 export const update: RequestHandler = async (req: any, res: any) => {
