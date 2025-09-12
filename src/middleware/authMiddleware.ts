@@ -5,7 +5,7 @@ export const protect = (req: any, res: Response, next: NextFunction): void => {
     const token = req.cookies.token;
 
     if (!token) {
-        res.status(401).json({ message: "Unauthorized" }); 
+        res.status(200).json({ user: null }); 
         return;
     };
 
@@ -14,7 +14,7 @@ export const protect = (req: any, res: Response, next: NextFunction): void => {
         req.user = decoded;
         next();
     } catch {
-        res.status(401).json({ message: "Token invalid" });
+        res.status(200).json({ user: null });
         return;
     };
 };

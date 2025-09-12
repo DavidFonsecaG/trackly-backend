@@ -1,4 +1,4 @@
-import { Request, RequestHandler, Response } from "express";
+import { RequestHandler } from "express";
 import Student from "../models/Student";
 import mongoose from "mongoose";
 
@@ -41,7 +41,7 @@ export const getStudentsByUser = async (req: any, res: any) => {
         const objectId = mongoose.Types.ObjectId.createFromHexString(userId);
         const students = await Student.find({ userId: objectId })
         if (!students.length) {
-            res.status(404).json({ message: "No students associated with this user" });
+            res.status(200).json([]);
             return;
         };
         const parsedStudents = students.map(student => ({

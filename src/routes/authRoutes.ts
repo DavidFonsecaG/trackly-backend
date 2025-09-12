@@ -15,7 +15,7 @@ router.post("/login",
     (req: any, res) => {
         const token = generateToken(req.user.id);
         res.cookie("token", token, { httpOnly: true, sameSite: "strict", secure: false });
-        res.status(200).json({id: req.user._id, email: req.user.email, name: req.user.name });
+        res.status(200).json({id: req.user._id, email: req.user.email, name: req.user.name, picture: req.user.picture });
     }
 );
 router.get("/google", passport.authenticate("google", { scope: ["profile", "email"]}));
