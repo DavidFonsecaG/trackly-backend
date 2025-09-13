@@ -11,7 +11,7 @@ import routes from "./routes";
 dbConnection();
 
 const app = express();
-app.use(cors({ origin: 'https://localhost:5137', credentials: true }));
+app.use(cors({ origin: 'http://localhost:8080', credentials: true }));
 app.use(morgan('dev'));
 app.use(cookieParser());
 app.use(express.json());

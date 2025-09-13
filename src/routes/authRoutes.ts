@@ -24,7 +24,7 @@ router.get("/google/callback",
     (req: any, res) => {
         const token = generateToken(req.user.id);
         res.cookie("token", token, { httpOnly: true, sameSite: "strict", secure: false });
-        res.redirect("http://localhost:5173/login/loading");
+        res.redirect("http://localhost:8080/login/loading");
     }
 );
 
