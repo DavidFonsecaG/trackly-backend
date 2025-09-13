@@ -5,7 +5,7 @@ export const protect = (req: any, res: Response, next: NextFunction): void => {
     const token = req.cookies.token;
 
     if (!token) {
-        res.status(200).json({ user: null }); 
+        res.status(200).json(null); 
         return;
     };
 
@@ -14,7 +14,7 @@ export const protect = (req: any, res: Response, next: NextFunction): void => {
         req.user = decoded;
         next();
     } catch {
-        res.status(200).json({ user: null });
+        res.status(200).json(null);
         return;
     };
 };
