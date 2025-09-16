@@ -23,7 +23,7 @@ export const register: RequestHandler = async (req, res) => {
 
 export const logout: RequestHandler = (req, res) => {
     res.clearCookie("token");
-    res.json({ message: "Logged out" });
+    res.status(200).json({ message: "Logged out" });
 };
 
 export const getUser: RequestHandler = async (req: any, res) => {
@@ -33,7 +33,7 @@ export const getUser: RequestHandler = async (req: any, res) => {
         return;
     };
 
-    res.json({ id: user._id, email: user.email, name: user.name, picture: user.picture });
+    res.status(200).json({ id: user._id, email: user.email, name: user.name, picture: user.picture });
 };
 
 export const update: RequestHandler = async (req: any, res: any) => {
