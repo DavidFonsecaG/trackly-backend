@@ -11,12 +11,13 @@ import routes from "./routes";
 dbConnection();
 
 const app = express();
-app.use(cors({ origin: 'http://localhost:8080', credentials: true }));
+app.use(cors({ 
+    origin: ['https://trackly-mcc.vercel.app', 'http://localhost:8080'], 
+    credentials: true 
+}));
 app.use(morgan('dev'));
 app.use(cookieParser());
 app.use(express.json());
 app.use(passport.initialize());
 app.use('/api', routes);
-app.listen(process.env.PORT, () => {
-    console.log(`Listening at http://localhost:${process.env.PORT}`)
-});
+app.listen(process.env.PORT, () => {console.log(`Listening at http://localhost:${process.env.PORT}`)});

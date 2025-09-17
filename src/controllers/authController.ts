@@ -17,12 +17,16 @@ export const register: RequestHandler = async (req, res) => {
     const user = await User.create({ email, password: hashed, name, picture });
 
     const token = generateToken(user.id);
-    res.cookie("token", token, { httpOnly: true, sameSite: "strict", secure: false });
+    res.cookie("token", token, { httpOnly: true, sameSite: "none", secure: true });
     res.status(201).json({ id: user._id, email: user.email, name: user.name, picture: user.picture });
 };
 
 export const logout: RequestHandler = (req, res) => {
-    res.clearCookie("token");
+    res.clearCookie("token", {
+    httpOnly: true,
+    sameSite: "none",
+    secure: true,
+  });
     res.status(200).json({ message: "Logged out" });
 };
 

@@ -9,6 +9,4 @@ router.post("/create", protect, createStudent);
 router.post("/update", protect, updateStudent);
 router.delete("/delete/:studentId", protect, deleteStudent);
 
-router.get("/", protect, getStudentsByUser);
-
 export default router;

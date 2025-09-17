@@ -14,7 +14,7 @@ router.post("/login",
     passport.authenticate("local", { session: false }),
     (req: any, res) => {
         const token = generateToken(req.user.id);
-        res.cookie("token", token, { httpOnly: true, sameSite: "strict", secure: false });
+        res.cookie("token", token, { httpOnly: true, sameSite: "none", secure: true });
         res.status(200).json({id: req.user._id, email: req.user.email, name: req.user.name, picture: req.user.picture });
     }
 );
@@ -23,8 +23,8 @@ router.get("/google/callback",
     passport.authenticate("google", { session: false, failureRedirect: "/login" }),
     (req: any, res) => {
         const token = generateToken(req.user.id);
-        res.cookie("token", token, { httpOnly: true, sameSite: "strict", secure: false });
-        res.redirect("http://localhost:8080/login/loading");
+        res.cookie("token", token, { httpOnly: true, sameSite: "none", secure: true });
+        res.redirect("https://trackly-mcc.vercel.app/login/loading");
     }
 );
 
