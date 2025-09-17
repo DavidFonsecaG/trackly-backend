@@ -2,6 +2,32 @@ import { RequestHandler } from "express";
 import Student from "../models/Student";
 import mongoose from "mongoose";
 
+export const getStudentsByUser = async (req: any, res: any) => {
+    try {
+        const userId = req.user?.id
+        const objectId = mongoose.Types.ObjectId.createFromHexString(userId);
+        const students = await Student.find({ userId: objectId })
+        if (!students.length) {
+            res.status(200).json([]);
+            return;
+        };
+        const parsedStudents = students.map(student => ({
+            id: student._id, 
+            name: student.name, 
+            email: student.email, 
+            applicationType: student.applicationType, 
+            term: student.term, 
+            program: student.program,
+            schedule: student.schedule,
+            status: student.status,
+            lastUpdated: student.updatedAt
+        }));
+        res.status(200).json(parsedStudents);
+    } catch (err) {
+        res.status(500).json({ message: "Failed to fetch students"});
+    }
+};
+
 export const createStudent: RequestHandler = async (req: any, res: any) => {
     try {
         const userId = req.user.id
@@ -33,36 +59,6 @@ export const createStudent: RequestHandler = async (req: any, res: any) => {
             message: "Error when creating a student"
         });
     }
-};
-
-export const getStudentsByUser = async (req: any, res: any) => {
-    try {
-        const userId = req.user?.id
-        const objectId = mongoose.Types.ObjectId.createFromHexString(userId);
-        const students = await Student.find({ userId: objectId })
-        if (!students.length) {
-            res.status(200).json([]);
-            return;
-        };
-        const parsedStudents = students.map(student => ({
-            id: student._id, 
-            name: student.name, 
-            email: student.email, 
-            applicationType: student.applicationType, 
-            term: student.term, 
-            program: student.program,
-            schedule: student.schedule,
-            status: student.status,
-            lastUpdated: student.updatedAt
-        }));
-        res.status(200).json(parsedStudents);
-    } catch (err) {
-        res.status(500).json({ message: "Failed to fetch students"});
-    }
-};
-
-export const getStudentById = async () => {
-
 };
 
 export const updateStudent: RequestHandler = async (req: any, res: any) => {

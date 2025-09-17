@@ -1,6 +1,6 @@
 import express from "express";
-import { getStudentsByUser, getStudentById, createStudent, updateStudent, deleteStudent } from "../controllers/studentController";
 import { protect } from "../middleware/authMiddleware";
+import { getStudentsByUser, createStudent, updateStudent, deleteStudent } from "../controllers/studentController";
 
 const router = express.Router();
 

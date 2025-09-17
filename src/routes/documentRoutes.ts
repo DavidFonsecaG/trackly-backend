@@ -4,7 +4,7 @@ import { createStudentDocument, getStudentDocumentsByUser, updateStudentDocument
 
 const router = express.Router();
 
-router.post("/list", protect, getStudentDocumentsByUser);
+router.get("/list", protect, getStudentDocumentsByUser);
 router.post("/create", protect, createStudentDocument);
 router.post("/update", protect, updateStudentDocument);
 router.delete("/delete/:studentId", protect, deleteStudentDocument);
