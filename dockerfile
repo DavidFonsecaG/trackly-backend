@@ -11,6 +11,6 @@ COPY . .
 # Build TS -> JS
 RUN npm run build
 
-EXPOSE 3000
+EXPOSE 4000
 
 CMD ["node", "dist/server.js"]
