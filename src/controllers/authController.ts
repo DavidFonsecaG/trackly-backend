@@ -13,7 +13,7 @@ export const register: RequestHandler = async (req, res) => {
     };
 
     const hashed = await bcrypt.hash(password, 10);
-    const picture = "https://api.dicebear.com/9.x/initials/svg?seed=" + {name};
+    const picture = "https://api.dicebear.com/9.x/initials/svg?seed=" + name;
     const user = await User.create({ email, password: hashed, name, picture });
 
     const token = generateToken(user.id);
