@@ -36,7 +36,7 @@ export const getUser: RequestHandler = async (req: any, res) => {
         res.status(404).json({ message: "User not found" });
         return;
     };
-
+    res.setHeader("Cache-Control", "no-store");
     res.status(200).json({ id: user._id, email: user.email, name: user.name, picture: user.picture });
 };
 
