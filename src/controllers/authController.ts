@@ -17,7 +17,7 @@ export const register: RequestHandler = async (req, res) => {
     const user = await User.create({ email, password: hashed, name, picture });
 
     const token = generateToken(user.id);
-    res.cookie("token", token, { httpOnly: true, sameSite: "none", secure: true });
+    res.cookie("token", token, { httpOnly: true, sameSite: "none", secure: true, maxAge: 60 * 60 * 1000 *24 });
     res.status(201).json({ id: user._id, email: user.email, name: user.name, picture: user.picture });
 };
 

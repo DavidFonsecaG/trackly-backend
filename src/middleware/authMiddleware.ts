@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 import { Response, NextFunction } from "express";
 
 export const protect = (req: any, res: Response, next: NextFunction): void => {
-    const token = req.cookies.token;
+    const token = req.cookies?.token;
 
     if (!token) {
         res.status(200).json(null); 
