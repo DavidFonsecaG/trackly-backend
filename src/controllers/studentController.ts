@@ -69,9 +69,11 @@ export const updateStudent: RequestHandler = async (req: any, res: any) => {
             return res.status(400).json({ message: "Student ID is required" });
         }
 
-        const updatedStudent = await Student.findByIdAndUpdate(
-            student.id,
-            { $set: student },
+        const { id, _id, userId, lastUpdated, ...updates } = student;
+
+        const updatedStudent = await Student.findOneAndUpdate(
+            { _id: student.id, userId: req.user.id },
+            { $set: updates },
             { new: true, runValidators: true }
         );
 
@@ -101,7 +103,7 @@ export const updateStudent: RequestHandler = async (req: any, res: any) => {
 export const deleteStudent: RequestHandler = async (req: any, res: any) => {
     try {
         const { studentId } = req.params;
-        const deletedStudent = await Student.findByIdAndDelete(studentId)
+        const deletedStudent = await Student.findOneAndDelete({ _id: studentId, userId: req.user.id })
         if (!deletedStudent) {
             return res.status(404).json({message: "Student not found!"});
         }

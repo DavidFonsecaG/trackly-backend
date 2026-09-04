@@ -12,7 +12,7 @@ passport.use(new LocalStrategy({
         if (!user || !user.password) return done(null, false, { message: "Invalid credentials" });
 
         const match = await bcrypt.compare(password, user.password);
-        if (match) return done(null, false, { message: " Invalid credentials" });
+        if (!match) return done(null, false, { message: "Invalid credentials" });
 
         return done(null, user);
     } catch (err) {

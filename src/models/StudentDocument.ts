@@ -4,7 +4,7 @@ const documentSchema = new mongoose.Schema({
     id: String,
     name: String,
     required: Boolean,
-    submitted: Boolean || null,
+    submitted: { type: Boolean, default: null },
     submissionDate: String,
     notes: String
 });

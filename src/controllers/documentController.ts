@@ -1,13 +1,17 @@
 import { RequestHandler } from "express";
 import StudentDocument from "../models/StudentDocument";
+import Student from "../models/Student";
 import mongoose from "mongoose";
 
 export const getStudentDocumentsByUser = async (req: any, res: any) => {
     try {
         const ids: string[] = req.body;
-        
+
+        const ownedStudents = await Student.find({ _id: { $in: ids }, userId: req.user.id }).select("_id");
+        const ownedIds = ownedStudents.map(s => s._id);
+
         const studentDocuments = (
-            await Promise.all(ids.map(id => StudentDocument.findOne({ studentId: id })))
+            await Promise.all(ownedIds.map(id => StudentDocument.findOne({ studentId: id })))
         ).filter(Boolean);
 
         const parsedStudentDocuments = studentDocuments.map(sDocuments => ({
@@ -24,6 +28,12 @@ export const getStudentDocumentsByUser = async (req: any, res: any) => {
 export const createStudentDocument: RequestHandler = async (req: any, res: any) => {
     try {
         const { studentId, studentDocument } = req.body
+
+        const owns = await Student.exists({ _id: studentId, userId: req.user.id });
+        if (!owns) {
+            return res.status(404).json({ ok: false, message: "Student not found" });
+        }
+
         const createdStudentDocument = await StudentDocument.create({
             studentId: studentId,
             documents: studentDocument.documents
@@ -48,6 +58,11 @@ export const updateStudentDocument: RequestHandler = async (req: any, res: any) 
       });
     }
 
+    const owns = await Student.exists({ _id: studentId, userId: req.user.id });
+    if (!owns) {
+      return res.status(404).json({ ok: false, message: "Student not found" });
+    }
+
     const updatedDoc = await StudentDocument.findOneAndUpdate(
       { studentId },
       { documents: studentDocument.documents },
@@ -67,6 +82,12 @@ export const deleteStudentDocument: RequestHandler = async (req: any, res: any) 
     try {
         const { studentId } = req.params;
         const objectId = mongoose.Types.ObjectId.createFromHexString(studentId);
+
+        const owns = await Student.exists({ _id: objectId, userId: req.user.id });
+        if (!owns) {
+            return res.status(404).json({message: "Student Document not found!"});
+        }
+
         const deletedStudent = await StudentDocument.findOneAndDelete({studentId: objectId});
         if (!deletedStudent) {
             return res.status(404).json({message: "Student Document not found!"});
